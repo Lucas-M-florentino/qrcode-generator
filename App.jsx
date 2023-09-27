@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View, Linking, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Linking, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 import QRCode from 'react-qr-code';
 import QRCodeLink from 'qrcode';
@@ -30,20 +30,24 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
-      {link && <QRCode value={link} size={200} />}
-      <TextInput
-        style={styles.formInput}
-        keyboardType='text'
-        onChangeText={(text) => handleQrcode(text)}
-        value={link}
-      />
-      {link && (
-        <TouchableOpacity onPress={handleDownloadQrcode} style={styles.downloadButton}>
-          <Text style={styles.downloadButtonText}>Baixar QR Code</Text>
-        </TouchableOpacity>
-      )}
-    </View>
+
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.container}>
+        {link && <QRCode value={link} size={200} />}
+        <TextInput
+          style={styles.formInput}
+          keyboardType='text'
+          onChangeText={(text) => handleQrcode(text)}
+          placeholder='Digite a URL ...'
+          value={link}
+        />
+        {link && (
+          <TouchableOpacity onPress={handleDownloadQrcode} style={styles.downloadButton}>
+            <Text style={styles.downloadButtonText}>Baixar QR Code</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -63,6 +67,11 @@ const styles = StyleSheet.create({
     padding: '8px',
     outline: 'none',
     border: '1px solid #ccc',
+    shadowOffset: { width: 0, height: 2 },
+    shadowColor: '#ccc',
+    shadowOpacity: 0.5,
+    backgroundColor: '#fafafa',
+    fontSize: 20,
   },
   downloadButton: {
     backgroundColor: '#007BFF',
